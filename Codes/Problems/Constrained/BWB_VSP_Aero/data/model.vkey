@@ -1,0 +1,13 @@
+# VSPGEOM v3 Tag Key File
+C:\Users\z5653370\OneDrive - UNSW\Documents\PhD\EMO\RRO_code\Problems\Constrained\BWB_VSP_Aero\data\model.vspgeom
+2
+
+# part#,geom#,surf#,gname,gid,thick,plate,copy#,geomcopy#
+1,0,0,WingGeom1_C,SYSATFFGRD,0,3,1,1
+2,0,1,WingGeom1_C,SYSATFFGRD,0,3,2,1
+
+2
+
+# tag#,part#,ssname1,ssname2,...,ssid1,ssid2,...
+1,1
+2,2
