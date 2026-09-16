@@ -1,0 +1,22 @@
+# required packages
+numpy==2.4.6
+scipy==1.16.3
+scikit-learn==1.7.2
+pandas==2.3.3
+sympy==1.14.0
+matplotlib==3.10.7
+joblib==1.5.2
+pymoo
+pysr==1.5.9
+smt==2.10.0
+openvsp==3.51.2
+openvsp-config==0.1.0
+
+# Torque Arm problem (Problems/Constrained/torque_arm.py) needs the MATLAB
+# Engine API for Python, matched to your installed MATLAB version. This is
+# NOT on PyPI in a version-agnostic way -- install it from your MATLAB
+# installation, e.g.:
+#   cd "<matlabroot>\extern\engines\python"
+#   python -m pip install .
+# (or, for MATLAB R2022b+, try: pip install matlabengine==<your MATLAB version>)
+# It also requires the MATLAB app itself and a valid license.

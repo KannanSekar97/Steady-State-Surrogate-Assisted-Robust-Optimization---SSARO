@@ -1,0 +1,70 @@
+HOW TO RUN
+==========
+
+Folder layout
+-------------
+Codes_JMD/
+    Problems/               3 constrained (Constrained/) + 3 unconstrained
+                             (Unconstrained/) problem definitions.
+    Utilities/               Everything else: Optimization.py (surrogate-
+                             assisted robust optimization loop), evaluators, and all
+                             post-processing helpers (SSARO_robust_ND_front,
+                             SSARO_95th_percentile_domination_plot,
+                             Knee_point_marking, Hypervolume_and_statistics,
+                             Robust_reference_set, etc.)
+    run_experiment.py        Runs ONE problem/run: optimization -> robust ND
+                             front -> SSARO 95th-percentile plot.
+    post_processing.py       Run after ALL runs (across all problems) are
+                             finished: hypervolume + statistics, median-run
+                             SSARO 95th plot, knee-point marking.
+    Results/                 Results/<PROBLEM>/Run_XX/
+                             holds each run's optimization output;
+                             Results/<PROBLEM>/Robust_ND_front_points,
+                             /Robust_ND_front, /Saved_Evaluator_Models hold
+                             the per-run robust-front outputs.
+
+Always run scripts from the Codes root directory (the one containing
+Problems/, Utilities/, run_experiment.py) so the "Utilities.X" / "Problems.X"
+imports resolve correctly.
+
+On Windows
+
+1) Run a single problem/run
+----------------------------
+Edit the bottom of run_experiment.py:
+
+    run_id = 1
+    problem_idx = 4     # index into PROBLEMS list at the top of the file
+                         # 0=TP4, 1=RTP1, 2=RTP2, 3=CBEAM, 4=TA, 5=BWB_VSP_AERO
+
+Then:
+    python run_experiment.py
+
+Each call to run_problem(problem_idx, run_id) in run_experiment.py does, in
+order:
+    1. Optimization.main(...)              -> Results/<PROBLEM>/Run_XX/
+    2. compute_robust_nd_front(...)         -> Results/<PROBLEM>/Robust_ND_front_points/,
+                                                Saved_Evaluator_Models/
+    3. plot_ssaro_95th_front(...)           -> Results/<PROBLEM>/Robust_ND_front/
+                                                ssaro_95th_front_run_XX.png
+
+To test with a smaller budget (fewer optimization iterations), pass a
+params override, e.g. from a Python shell in the project root:
+
+    from run_experiment import run_problem
+    run_problem(problem_idx=1, run_id=1, params={"budget_scale_params": 11})
+
+2) Run post-processing (after all runs/problems are complete)
+---------------------------------------------------------------
+    python post_processing.py
+
+This produces, per problem, under Results/:
+    Statistics/{problem}_HV_statistics.{json,txt}
+    Median_HV_figure/{problem}_median_HV.png
+    95th_percentile_median_HV_figure/{problem}_median_HV.png
+    95th_percentile_median_HV_figure/{problem}_knee_marked.png
+
+The median-run plot and knee-point plot compare against an external robust
+reference front from Robust_front_NSGA-II/Robust_front_{problem}_F.npy
+(generate this once per problem with Utilities/Robust_reference_set.py); if
+that file is missing, the SSARO front is still plotted on its own.
